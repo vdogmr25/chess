@@ -18,7 +18,7 @@ public:
      *
      * @param color Color of the piece.
      */
-    Piece(std::string& color);
+    Piece(std::string color, bool white);
     
     //No special Destructor needed
     
@@ -71,15 +71,19 @@ public:
     bool isOnSquare () const;
     
     /**
+     * Returns if a piece is white.
+     */
+    bool isWhite () const;
+    
+    /**
      * Returns a pointer to the square the piece is on.
      */
     Square* location () const;
-protected:
-    // protected attributes
-    std::string _color;
 private:
     // private attributes
     Square* _occupies;
+    std::string _color;
+    bool _white;
 };
 
 #endif

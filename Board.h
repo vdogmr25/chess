@@ -56,6 +56,14 @@ public:
     static bool isClearDiagonal (Square& from, Square& to);
     
     /**
+     * Checks if the End of the board
+     *
+     * @param from The start location.
+     * @param to The end location.
+     */
+    static bool isEnd (Square& location);
+    
+    /**
      * Prints the board.
      *
      * @param outStream The stream to send display values to.

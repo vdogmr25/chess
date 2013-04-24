@@ -8,12 +8,20 @@
 
 #include "King.h"
 
-King::King(std::string& color) : RestrictedPiece(color) {}
+//Constructs a king by passing the color string and the white bool to parent
+King::King(std::string color, bool white) : RestrictedPiece(color, white) {}
 
+//check for legal move
 bool King::canMoveTo(Square& location) const
 {
+    //start with false
     bool check = false;
-    if ((!location.occupied() || location.occupiedBy()->color().compare(this->color()) !=0 ) && (abs(this->location()->getX() - location.getX()) <= 1 && abs(this->location()->getY() - location.getY()) <= 1)) {
+    //If the square to move to is empty or occupied by an opponent
+    if ((!location.occupied() || location.occupiedBy()->isWhite() != isWhite())
+        //and the piece is only moving one square.
+        && (abs(this->location()->getX() - location.getX()) <= 1 && abs(this->location()->getY() - location.getY()) <= 1))
+    {
+        //set to true
         check= true;
     }
     return check;
@@ -28,5 +36,5 @@ int King::value() const
 void King::display (std::ostream& outStream) const
 {
     // Sends the piece's color and symbol into the outStream.
-    outStream << _color + "K";
+    outStream << color()[0] << "K";
 }

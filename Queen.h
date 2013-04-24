@@ -13,7 +13,7 @@ public:
      *
      * @param color Color of the piece.
      */
-    Queen(std::string& color);
+    Queen(std::string color, bool white);
     
     //No special Destructor needed
     

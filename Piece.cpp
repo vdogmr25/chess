@@ -9,23 +9,26 @@
 #include "Piece.h"
 #include "Player.h"
 
-Piece::Piece(std::string& color) : _color(color) {}
+Piece::Piece(std::string color, bool white) : _color(color), _white(white) {}
 
 bool Piece::moveTo (Player& byPlayer, Square& to)
 {
     //Start with false
     bool attempt = false;
+    Piece* capture = NULL;
+    Square* current = location();
     //If the end location is unoccupied or occupied by a different colored piece
-    if ((!to.occupied() || to.occupiedBy()->color() != _color)
+    if ((!to.occupied() || to.occupiedBy()->isWhite() != isWhite())
         //And the player moving the piece owns the piece and the piece can move to the
         //square
-        && (this->color()[0] == byPlayer.getName()[0] && canMoveTo(to)))
+        && (isWhite() == byPlayer.isWhite() && canMoveTo(to)))
     {
         //If the square is occupied..
         if (to.occupied())
         {
             //..capture the piece
-            byPlayer.capture(*(to.occupiedBy()));
+            capture = to.occupiedBy();
+            capture->setLocation(NULL);
         }
         //Set the old location's occupant to NULL
         location()->setOccupier(NULL);
@@ -35,6 +38,27 @@ bool Piece::moveTo (Player& byPlayer, Square& to)
         setLocation(&to);
         //set to true for successful move.
         attempt = true;
+    }
+    //If the player is in check
+    if (byPlayer.checkForCheck())
+    {
+        //Signal for bad move
+        attempt = false;
+        
+        //Revert pieces to old locations
+        if (capture)
+        {
+            setLocation(current);
+            to.setOccupier(capture);
+            current->setOccupier(this);
+            capture->setLocation(&to);
+        }
+    }
+    //If the player isn't in check and there's a piece to capture
+    else if(capture != NULL)
+    {
+        //capture
+        byPlayer.capture(*capture);
     }
     //return the result.
     return attempt;
@@ -56,6 +80,11 @@ bool Piece::isOnSquare () const
 {
     // Not developed yet.
     return true;
+}
+
+bool Piece::isWhite() const
+{
+    return _white;
 }
 
 Square* Piece::location () const

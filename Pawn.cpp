@@ -1,26 +1,3 @@
-//Grading Template
-
-/* ID         :  1300374
- Assignment :  Chess Part 2
- Class      :  CSIS 370 Object-Oriented Programming
- Date       :  4/9/12
- 
- Programming Assesment Standards
- 
- PROGRAM CORRECTNESS
- a) the program is complete & functions correctly       (40)________
- PROGRAM DESIGN
- b) object-oriented class design & implementation       (10)________
- c) appropriate use of language and features            (10)________
- d) subjective elegance                                 (20)________
- PROGRAM READABILITY AND DOCUMENTATION
- e) Header comments are complete & clear                 (5)________
- f) Internal comments are used when appropriate         (15)________
- 
- TOTAL                                                    (100)________
- 
- ******************************************************************/
-
 //
 //  Pawn.cpp
 //  Chess
@@ -30,8 +7,21 @@
 //
 
 #include "Pawn.h"
+#include "Queen.h"
 
-Pawn::Pawn(std::string& color) : RestrictedPiece(color) {}
+//Constructs a pawn by passing the color string and the white bool to parent
+Pawn::Pawn(std::string color, bool white) : RestrictedPiece(color, white) {}
+
+//Desturctor
+Pawn::~Pawn()
+{
+    //If there's a delegate
+    if (_delegate)
+    {
+        //delete the delegate
+        delete _delegate;
+    }
+}
 
 int Pawn::value() const
 {
@@ -44,10 +34,15 @@ bool Pawn::canMoveTo(Square& location) const
     //Start with false
     bool check = false;
     
-    //If the white player is trying to move up the board
-    if ((_color.compare("W") == 0 && location.getY() > this->location()->getY()) || 
+    //If there's a delegate
+    if (_delegate)
+    {
+        check = _delegate->canMoveTo(location);
+    }
+    //Otherwise, if the white player is trying to move up the board
+    else if ((isWhite() && location.getY() > this->location()->getY()) || 
         //or the black player is moving down the board
-        ((_color.compare("B") == 0 && location.getY() < this->location()->getY())))
+        ((!isWhite() && location.getY() < this->location()->getY())))
     {
         //If the player has moved and the x locations are the same for both squares
         if (hasMoved() && this->location()->getX() == location.getX()
@@ -79,7 +74,7 @@ bool Pawn::canMoveTo(Square& location) const
                  //and the end location is occupied..
                  && location.occupied()
                  //..by an opponent's piece
-                 && location.occupiedBy()->color().compare(this->color()) != 0)
+                 && location.occupiedBy()->isWhite() != isWhite())
         {
             //check is true
             check = true;
@@ -89,8 +84,32 @@ bool Pawn::canMoveTo(Square& location) const
     return check;
 }
 
+bool Pawn::moveTo(Player& byPlayer, Square& to)
+{
+    bool attempt = RestrictedPiece::moveTo(byPlayer, to);
+    if (attempt && Board::isEnd(to) && !_delegate)
+    {
+        _delegate = new Queen(color(), isWhite());
+    }
+    if (attempt && _delegate)
+    {
+        _delegate->setLocation(&to);
+    }
+    return attempt;
+}
+
 void Pawn::display (std::ostream& outStream) const
 {
-    // Sends the piece's color and symbol into the outStream.
-    outStream << _color + "P";
+    //If there's a delegate
+    if (_delegate)
+    {
+        //Call the delegate's display
+        _delegate->display(outStream);
+    }
+    //Otherwise
+    else
+    {
+        // Sends the piece's color and symbol into the outStream.
+        outStream << color()[0] << "P";
+    }
 }

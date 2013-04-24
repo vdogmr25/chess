@@ -9,8 +9,14 @@
 #include <algorithm>
 #include "Player.h"
 #include "Board.h"
+#include "Game.h"
 
-Player::Player (std::string name, Piece& myKing, std::set<Piece*>& myPieces) : _name(name), _myKing(myKing), _myPieces(myPieces) {}
+#define LETTER_MAX 104
+#define LETTER_MIN 97
+#define NUM_MAX 56
+#define NUM_MIN 49
+
+Player::Player (std::string name, bool white, Piece& myKing, std::set<Piece*>& myPieces) : _name(name), _white(white), _myKing(myKing), _myPieces(myPieces) {}
 
 Player::~Player()
 {
@@ -23,6 +29,12 @@ bool Player::makeMove()
     std::string from;
     std::string to;
     bool play;
+    
+    //Check if the player is in check and prompt accordingly.
+    if (checkForCheck())
+    {
+        std::cout << "You are in check." << std::endl;
+    }
     
     //prompt player for input.
     std::cout << _name << ", make your move: ";
@@ -44,23 +56,29 @@ bool Player::makeMove()
         
         //Keep trying to move
         play = true;
-    
+        
         //error trap if keep playing
         while (play
                //improper input based on size of input
                && (from.length() != 2 || to.length() != 2
-               //or improper letter values based on ASCII
-               || from[0] < 97 || from [0] > 104 || to[0] < 97 || to[0] > 104
-               //or improper number values based on ASCII
-               || from[1] < 49 || from [1] > 56 || to[1] < 49 || to[1] > 56
-               //or if the starting square is empty
-               || !Board::getBoard()->squareAt((int)from[0]-96, (int)from[1]-48)->occupied()
-               //or if the move failed
-               || !Board::getBoard()->squareAt((int)from[0]-96, (int)from[1]-48)->occupiedBy()->moveTo(*this, *(Board::getBoard()->squareAt((int)to[0]-96, (int)to[1]-48)))))
+                   //or improper letter values based on ASCII
+                   || from[0] < LETTER_MIN || from [0] > LETTER_MAX || to[0] < LETTER_MIN || to[0] > LETTER_MAX
+                   //or improper number values based on ASCII
+                   || from[1] < NUM_MIN || from [1] > NUM_MAX || to[1] < NUM_MIN || to[1] > NUM_MAX
+                   //or if the starting square is empty
+                   || !Board::getBoard()->squareAt((int)from[0] - LETTER_MIN + 1, (int)from[1] - NUM_MIN + 1)->occupied()
+                   //or if the move failed
+                   || !Board::getBoard()->squareAt((int)from[0] - LETTER_MIN + 1, (int)from[1] - NUM_MIN + 1)->occupiedBy()->moveTo(*this, *(Board::getBoard()->squareAt((int)to[0] - LETTER_MIN + 1, (int)to[1] - NUM_MIN + 1)))))
         {
+            //Check if the player is in check and prompt accordingly.
+            if (checkForCheck())
+            {
+                std::cout << "You are in check." << std::endl;
+            }
+            
             //inform user of bad input and prompt again.
             std::cout << "Invalid move." << std::endl << _name << ", make your move: ";
-        
+            
             //get input
             std::cin >> from;
             
@@ -79,7 +97,7 @@ bool Player::makeMove()
                 //quit the game
                 play = false;
             }
-        
+            
             //set to to lowercase
             std::transform(to.begin(), to.end(), to.begin(), ::tolower);
         }
@@ -100,20 +118,62 @@ std::string Player::getName() const
     return _name;
 }
 
+bool Player::isWhite() const
+{
+    return _white;
+}
+
 int Player::score() const
 {
-    return 0;
+    //start with 0
+    int score = 0;
+    
+    //variables for iteration
+    Piece* piece = NULL;
+    std::set<Piece*>::iterator it;
+    
+    //For each of the player's caputred pieces
+    for (it = _captured.begin(); it != _captured.end(); it++)
+    {
+        //add the value to the score.
+        piece = *it;
+        score += piece->value();
+    }
+    
+    return score;
 }
 
 void Player::capture(Piece& aPiece)
 {
-    aPiece.setLocation(NULL);
     _captured.insert(&aPiece);
 }
 
-std::set<Piece*>* Player::myPieces() const
+bool Player::checkForCheck()
 {
-    return NULL;
+    //Start with clear value
+    bool check = false;
+    
+    //variables for iteration
+    Piece* piece = NULL;
+    std::set<Piece*>::iterator it;
+    
+    //For each of the opponent's pieces
+    for (it = Game::opponentOf(*this)->myPieces()->begin(); it != Game::opponentOf(*this)->myPieces()->end(); it++)
+    {
+        //check if it can capture player's king
+        piece = *it;
+        if (piece->location() && piece->canMoveTo(*(myKing()->location())))
+        {
+            //set false if capture is possible.
+            check = true;
+        }
+    }
+    return check;
+}
+
+std::set<Piece*>* Player::myPieces()
+{
+    return &_myPieces;
 }
 
 Piece* Player::myKing() const

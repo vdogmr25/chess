@@ -13,7 +13,7 @@ public:
      *
      * @param color Color of the piece.
      */
-    Rook(std::string& color);
+    Rook(std::string color, bool white);
     
     //No special Destructor needed
     

@@ -14,7 +14,7 @@ public:
      *
      * @param color The color of the bishop.
      */
-    Bishop(std::string& color);
+    Bishop(std::string color, bool white);
     
     //No special Destructor needed
     

@@ -12,7 +12,7 @@ int main (int argc, const char * argv[])
     //Welcome player and list input commands
     std::cout << "Welcome to Chess!" << std::endl
     << "Moves are entered in algebraic notation (eg. a2 a4)." << std::endl
-    << "Type 'quit' to quit." << std::endl;
+    << "Enter 'quit' to quit." << std::endl;
     
     //Get the first player
     currentPlayer = Game::getNextPlayer();

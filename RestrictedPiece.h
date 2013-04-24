@@ -15,7 +15,7 @@ public:
      *
      * @param color The color of the piece.
      */
-    RestrictedPiece(std::string& color);
+    RestrictedPiece(std::string color, bool white);
     
     //No special Destructor needed
     
@@ -27,7 +27,7 @@ public:
      * @param byPlayer The player moving the piece.
      * @param to The square to move to.
      */
-    bool moveTo (Player& byPlayer, Square& to);
+    virtual bool moveTo (Player& byPlayer, Square& to);
 protected:
     //Protected attributes
     bool hasMoved() const;

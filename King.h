@@ -14,7 +14,7 @@ public:
      *
      * @param color Color of the piece.
      */
-    King(std::string& color);
+    King(std::string color, bool white);
     
     //No special Destructor needed
     

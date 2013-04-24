@@ -11,18 +11,21 @@ class Player {
   // Attributes
 private:
     std::string _name;
+    bool _white;
     Piece& _myKing;
     std::set<Piece*> _myPieces;
     std::set<Piece*> _captured;
   // Operations
 public:
-    Player (std::string name, Piece& myKing, std::set<Piece*>& myPieces);
+    Player (std::string name, bool white, Piece& myKing, std::set<Piece*>& myPieces);
     ~Player();
     bool makeMove ();
     std::string getName () const;
+    bool isWhite () const;
     int score () const;
     void capture (Piece& aPiece);
-    std::set<Piece*>* myPieces () const;
+    bool checkForCheck ();
+    std::set<Piece*>* myPieces();
     Piece* myKing () const;
 };
 

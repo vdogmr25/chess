@@ -13,7 +13,7 @@ public:
      *
      * @param color Color of the piece.
      */
-    Knight(std::string& color);
+    Knight(std::string color, bool white);
     
     //No special Destructor needed
     

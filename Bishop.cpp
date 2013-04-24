@@ -8,12 +8,22 @@
 
 #include "Bishop.h"
 
-Bishop::Bishop(std::string& color) : Piece(color){}
+//Constructs by passing the color string and the white boolean to parent
+Bishop::Bishop(std::string color, bool white) : Piece(color, white){}
 
+//Checks for legal move
 bool Bishop::canMoveTo(Square& location) const
 {
+    //start with false
     bool check = false;
-    if (abs(this->location()->getX() - location.getX()) == abs(this->location()->getY() - location.getY()) && (!location.occupied() || location.occupiedBy()->color().compare(this->color()) !=0 ) && Board::isClearDiagonal(*(this->location()), location)) {
+    //If the piece is moving the same distance vertically as horizontally
+    if (abs(this->location()->getX() - location.getX()) == abs(this->location()->getY() - location.getY())
+        //and the square to move to is empty or occupied by an opponent
+        && (!location.occupied() || location.occupiedBy()->isWhite() != isWhite())
+        //and the path there is clear
+        && Board::isClearDiagonal(*(this->location()), location))
+    {
+        //set to true.
         check = true;
     }
     return check;
@@ -28,5 +38,5 @@ int Bishop::value() const
 void Bishop::display (std::ostream& outStream) const
 {
     // Sends the piece's color and symbol into the outStream.
-    outStream << _color + "B";
+    outStream << color()[0] << "B";
 }

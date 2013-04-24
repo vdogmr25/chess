@@ -8,8 +8,10 @@
 
 #include "RestrictedPiece.h"
 
-RestrictedPiece::RestrictedPiece(std::string& color) : Piece(color)
+//Constucts a rescricted piece by passing the color string and the white bool to parent
+RestrictedPiece::RestrictedPiece(std::string color, bool white) : Piece(color, white)
 {
+    //set _moved to false.
     _moved = false;
 }
 

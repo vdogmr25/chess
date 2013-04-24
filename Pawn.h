@@ -14,9 +14,12 @@ public:
      *
      * @param color Color of the piece.
      */
-    Pawn(std::string& color);
+    Pawn(std::string color, bool white);
     
-    //No special Destructor needed
+    /**
+     * Destruct a Pawn
+     */
+    ~Pawn();
     
     //Accessors
     
@@ -31,6 +34,14 @@ public:
      * @param location The square to test movement to.
      */
     bool canMoveTo (Square& location) const;
+    
+    /**
+     * Moves the Piece to a specific square.
+     *
+     * @param byPlayer The player moving the piece.
+     * @param to The square to move to.
+     */
+    virtual bool moveTo (Player& byPlayer, Square& to);
     
     /**
      * Displays the piece in the passed stream.

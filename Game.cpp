@@ -14,6 +14,9 @@
 #include "King.h"
 #include "Queen.h"
 
+#define WHITE "White"
+#define BLACK "Black"
+
 std::set<Piece*> Game::_whitePieces;
 std::set<Piece*> Game::_blackPieces;
 Player* Game::_whitePlayer;
@@ -50,14 +53,16 @@ Player* Game::getNextPlayer()
 void Game::initialize()
 {
     //variables to help with set up.
-    std::string color = "W";
     Piece* newPiece = NULL;
+    
+    //start with white pieces
+    bool isWhite = true;
     
     //Build 8 white pawns
     for (int i = 1; i <= 8; i++)
     {
         // Build a new Pawn.
-        newPiece = new Pawn(color);
+        newPiece = new Pawn(WHITE, isWhite);
         
         // Set it on the board.
         newPiece->setLocation(Board::getBoard()->squareAt(i,2));
@@ -68,7 +73,7 @@ void Game::initialize()
     }
     
     // Build a new Rook
-    newPiece = new Rook(color);
+    newPiece = new Rook(WHITE, isWhite);
     
     // Set it on the board.
     newPiece->setLocation(Board::getBoard()->squareAt(1,1));
@@ -78,7 +83,7 @@ void Game::initialize()
     _whitePieces.insert(newPiece);
     
     // Build a new Rook
-    newPiece = new Rook(color);
+    newPiece = new Rook(WHITE, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(8,1));
@@ -88,7 +93,7 @@ void Game::initialize()
     _whitePieces.insert(newPiece);
     
     // Builld a new knight
-    newPiece = new Knight(color);
+    newPiece = new Knight(WHITE, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(2,1));
@@ -98,7 +103,7 @@ void Game::initialize()
     _whitePieces.insert(newPiece);
     
     // Builld a new knight
-    newPiece = new Knight(color);
+    newPiece = new Knight(WHITE, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(7,1));
@@ -108,7 +113,7 @@ void Game::initialize()
     _whitePieces.insert(newPiece);
     
     // Build a new bishop
-    newPiece = new Bishop(color);
+    newPiece = new Bishop(WHITE, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(3,1));
@@ -118,7 +123,7 @@ void Game::initialize()
     _whitePieces.insert(newPiece);
     
     // Build a new bishop
-    newPiece = new Bishop(color);
+    newPiece = new Bishop(WHITE, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(6,1));
@@ -128,7 +133,7 @@ void Game::initialize()
     _whitePieces.insert(newPiece);
     
     // Build a new queen
-    newPiece = new Queen(color);
+    newPiece = new Queen(WHITE, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(4,1));
@@ -138,7 +143,7 @@ void Game::initialize()
     _whitePieces.insert(newPiece);
     
     // Build a new king
-    newPiece = new King(color);
+    newPiece = new King(WHITE, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(5,1));
@@ -147,16 +152,17 @@ void Game::initialize()
     // Add it to white pieces
     _whitePieces.insert(newPiece);
     
-    _whitePlayer = new Player("White", *newPiece, _whitePieces);
+    //create the white player
+    _whitePlayer = new Player(WHITE, isWhite, *newPiece, _whitePieces);
     
-    // Start making black pieces
-    color = "B";
+    //set to black pieces
+    isWhite = false;
     
     //Build 8 black pawns
     for (int i = 1; i <= 8; i++)
     {
         // Build a new Pawn.
-        newPiece = new Pawn(color);
+        newPiece = new Pawn(BLACK, isWhite);
         
         // Set it on the Board
         newPiece->setLocation(Board::getBoard()->squareAt(i,7));
@@ -167,7 +173,7 @@ void Game::initialize()
     }
     
     // Build a new Rook
-    newPiece = new Rook(color);
+    newPiece = new Rook(BLACK, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(1,8));
@@ -177,7 +183,7 @@ void Game::initialize()
     _blackPieces.insert(newPiece);
     
     // Build a new Rook
-    newPiece = new Rook(color);
+    newPiece = new Rook(BLACK, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(8,8));
@@ -187,7 +193,7 @@ void Game::initialize()
     _blackPieces.insert(newPiece);
     
     //Build a new Knight
-    newPiece = new Knight(color);
+    newPiece = new Knight(BLACK, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(2,8));
@@ -197,7 +203,7 @@ void Game::initialize()
     _blackPieces.insert(newPiece);
     
     //Build a new Knight
-    newPiece = new Knight(color);
+    newPiece = new Knight(BLACK, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(7,8));
@@ -207,7 +213,7 @@ void Game::initialize()
     _blackPieces.insert(newPiece);
     
     // Build a new Bishop
-    newPiece = new Bishop(color);
+    newPiece = new Bishop(BLACK, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(3,8));
@@ -217,7 +223,7 @@ void Game::initialize()
     _blackPieces.insert(newPiece);
     
     // Build a new Bishop
-    newPiece = new Bishop(color);
+    newPiece = new Bishop(BLACK, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(6,8));
@@ -227,7 +233,7 @@ void Game::initialize()
     _blackPieces.insert(newPiece);
     
     // Build a new Queen
-    newPiece = new Queen(color);
+    newPiece = new Queen(BLACK, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(4,8));
@@ -237,7 +243,7 @@ void Game::initialize()
     _blackPieces.insert(newPiece);
     
     // Build a new King
-    newPiece = new King(color);
+    newPiece = new King(BLACK, isWhite);
     
     // Set it on the Board
     newPiece->setLocation(Board::getBoard()->squareAt(5,8));
@@ -246,7 +252,10 @@ void Game::initialize()
     // Add it to black pieces.
     _blackPieces.insert(newPiece);
     
-    _blackPlayer = new Player("Black", *newPiece, _blackPieces);
+    //create the black player
+    _blackPlayer = new Player(BLACK, isWhite, *newPiece, _blackPieces);
+    
+    //set the _next player to black so main will call white first
     _nextPlayer = _blackPlayer;
 }
 

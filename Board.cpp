@@ -62,74 +62,51 @@ Square* Board::squareAt (int x, int y)
 
 bool Board::isClearVertical (Square& from, Square& to)
 {
-    //Start with true
+    //start with true
     bool check = true;
+    Square start = from;
+    Square stop = to;
     
     //If going from a large Y value to a smaller one
     if (from.getY() > to.getY())
     {
-        //Iterate down from the starting point up to
-        //(but not including) the stop point
-        for (int i = from.getY() - 1; i > to.getY(); i--)
-        {
-            //If a square is occupied
-            if (squareAt(from.getX(), i)->occupied())
-            {
-                //The check is false
-                check = false;
-            }
-        }
+        //swap the start and end
+        start = to;
+        stop = from;
     }
-    //If going from a small Y value to a larger one
-    else
+    for (int i = start.getY() + 1; i < stop.getY(); i++)
     {
-        //Iterate up from the starting point up to
-        //(but not including) the stop point
-        for (int i = from.getY() + 1; i < to.getY(); i++)
+        //If a square is occupied
+        if (squareAt(from.getX(), i)->occupied())
         {
-            //If a square is occupied
-            if (squareAt(from.getX(), i)->occupied())
-            {
-                //The check is false.
-                check = false;
-            }
+            //The check is false.
+            check = false;
         }
     }
-    
     return check;
 }
 
 bool Board::isClearHorizontal (Square& from, Square& to)
 {
+    //start with true
     bool check = true;
+    Square start = from;
+    Square stop = to;
+    
     //If going from a large X value to a smaller one
     if (from.getX() > to.getX())
     {
-        //Iterate left from the starting point up to
-        //(but not including) the stop point
-        for (int i = from.getX() - 1; i > to.getX(); i--)
-        {
-            //If a square is occupied
-            if (squareAt(i, from.getY())->occupied())
-            {
-                //The check is false
-                check = false;
-            }
-        }
+        //swap the start and end
+        start = to;
+        stop = from;
     }
-    //If going from a small X value to a larger one
-    else
+    for (int i = start.getX() + 1; i < stop.getX(); i++)
     {
-        //Iterate right from the starting point up to
-        //(but not including) the stop point
-        for (int i = from.getX() + 1; i < to.getX(); i++)
+        //If a square is occupied
+        if (squareAt(i, from.getY())->occupied())
         {
-            //If a square is occupied
-            if (squareAt(i, from.getY())->occupied())
-            {
-                //The check is false.
-                check = false;
-            }
+            //The check is false.
+            check = false;
         }
     }
     return check;
@@ -137,54 +114,38 @@ bool Board::isClearHorizontal (Square& from, Square& to)
 
 bool Board::isClearDiagonal (Square& from, Square& to)
 {
-    //Start with true
+    //start with true
     bool check = true;
-    if (from.getY() > to.getY() && from.getX() > to.getX())
+    Square start = from;
+    Square stop = to;
+    
+    //If going from a large Y value to a smaller one
+    if (from.getY() > to.getY())
+    {
+        //swap the start and end
+        start = to;
+        stop = from;
+    }
+    if (start.getX() > stop.getX())
     {
         //Iterate from bottom left to top right.
-        for (int i = from.getY() - to.getY() + 1; i > 0; i--)
+        for (int i = start.getY() - stop.getY() + 1; i > 0; i++)
         {
             //If a square is occupied
-            if (squareAt(from.getX() - i, from.getY() - i)->occupied())
+            if (squareAt(start.getX() - i, start.getY() - i)->occupied())
             {
                 //The check is false
                 check = false;
             }
         }
     }
-    else if (from.getY() > to.getY() && from.getX() < to.getX())
+    else
     {
         //Iterate from bottom right to top left.
-        for (int i = from.getY() - to.getY() + 1; i > 0; i--)
+        for (int i = start.getY() - stop.getY() + 1; i > 0; i--)
         {
             //If a square is occupied
-            if (squareAt(from.getX() + i, from.getY() - i)->occupied())
-            {
-                //The check is false
-                check = false;
-            }
-        }
-    }
-    else if (from.getY() < to.getY() && from.getX() > to.getX())
-    {
-        //Iterate from top left to bottom right.
-        for (int i = from.getY() - to.getY() + 1; i < 0; i++)
-        {
-            //If a square is occupied
-            if (squareAt(from.getX() + i, from.getY() - i)->occupied())
-            {
-                //The check is false
-                check = false;
-            }
-        }
-    }
-    else if (from.getY() < to.getY() && from.getX() < to.getX())
-    {
-        //Iterate from top left to bottom right.
-        for (int i = from.getY() - to.getY() + 1; i < 0; i++)
-        {
-            //If a square is occupied
-            if (squareAt(from.getX() - i, from.getY() - i)->occupied())
+            if (squareAt(start.getX() + i, start.getY() - i)->occupied())
             {
                 //The check is false
                 check = false;
@@ -194,14 +155,22 @@ bool Board::isClearDiagonal (Square& from, Square& to)
     return check;
 }
 
+bool Board::isEnd(Square& location)
+{
+    return (location.getY() == 1 || location.getY() == _DIMENSION);
+}
+
 void Board::display (std::ostream& outStream)
 {
-    //print the top border.
-    outStream << "-------------------------" << std::endl;
+    //print the letters and the top border.
+    outStream << "   a  b  c  d  e  f  g  h" << std::endl << " -------------------------" << std::endl;
     
     //iterate over the board by row from bottom to top
     for (int i = _DIMENSION - 1; i >= 0 ; i--)
     {
+        //print a number value for the row
+        outStream << (i + 1);
+        
         //iterate over the row left to right.
         for (int j = 0; j < _DIMENSION; j++)
         {
@@ -221,6 +190,6 @@ void Board::display (std::ostream& outStream)
             }
         }
         // print the edge of the row and the next border.
-        outStream << "|" << std::endl << "-------------------------" << std::endl;
+        outStream << "|" << std::endl << " -------------------------" << std::endl;
     }
 }

@@ -11,17 +11,12 @@
 #include "Board.h"
 #include "Game.h"
 
-#define LETTER_MAX 104
-#define LETTER_MIN 97
-#define NUM_MAX 56
-#define NUM_MIN 49
+#define LETTER_MAX 'h'
+#define LETTER_MIN 'a'
+#define NUM_MAX '8'
+#define NUM_MIN '1'
 
 Player::Player (std::string name, bool white, Piece& myKing, std::set<Piece*>& myPieces) : _name(name), _white(white), _myKing(myKing), _myPieces(myPieces) {}
-
-Player::~Player()
-{
-    
-}
 
 bool Player::makeMove()
 {
@@ -162,7 +157,7 @@ bool Player::checkForCheck()
     {
         //check if it can capture player's king
         piece = *it;
-        if (piece->location() && piece->canMoveTo(*(myKing()->location())))
+        if (piece->isOnSquare() && piece->canMoveTo(*(myKing()->location())))
         {
             //set false if capture is possible.
             check = true;

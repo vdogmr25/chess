@@ -67,20 +67,29 @@ bool Board::isClearVertical (Square& from, Square& to)
     Square start = from;
     Square stop = to;
     
-    //If going from a large Y value to a smaller one
-    if (from.getY() > to.getY())
+    //If not moving vertically
+    if (from.getX() != to.getX())
     {
-        //swap the start and end
-        start = to;
-        stop = from;
+        //the check is false.
+        check = false;
     }
-    for (int i = start.getY() + 1; i < stop.getY(); i++)
+    else
     {
-        //If a square is occupied
-        if (squareAt(from.getX(), i)->occupied())
+        //If going from a large Y value to a smaller one
+        if (from.getY() > to.getY())
         {
-            //The check is false.
-            check = false;
+            //swap the start and end
+            start = to;
+            stop = from;
+        }
+        for (int i = start.getY() + 1; i < stop.getY(); i++)
+        {
+            //If a square is occupied
+            if (squareAt(from.getX(), i)->occupied())
+            {
+                //The check is false.
+                check = false;
+            }
         }
     }
     return check;
@@ -93,20 +102,30 @@ bool Board::isClearHorizontal (Square& from, Square& to)
     Square start = from;
     Square stop = to;
     
-    //If going from a large X value to a smaller one
-    if (from.getX() > to.getX())
+    //If not moving horizontally
+    if (from.getY() != to.getY())
     {
-        //swap the start and end
-        start = to;
-        stop = from;
+        //The check is false.
+        check = false;
     }
-    for (int i = start.getX() + 1; i < stop.getX(); i++)
+    //Otherwise
+    else
     {
-        //If a square is occupied
-        if (squareAt(i, from.getY())->occupied())
+        //If going from a large X value to a smaller one
+        if (from.getX() > to.getX())
         {
-            //The check is false.
-            check = false;
+            //swap the start and end
+            start = to;
+            stop = from;
+        }
+        for (int i = start.getX() + 1; i < stop.getX(); i++)
+        {
+            //If a square is occupied
+            if (squareAt(i, from.getY())->occupied())
+            {
+                //The check is false.
+                check = false;
+            }
         }
     }
     return check;
@@ -119,36 +138,46 @@ bool Board::isClearDiagonal (Square& from, Square& to)
     Square start = from;
     Square stop = to;
     
-    //If going from a large Y value to a smaller one
-    if (from.getY() > to.getY())
+    //If the piece is not moving the same distance vertically as horizontally
+    if (abs(from.getX() - to.getX()) != abs(from.getY() - to.getY()))
     {
-        //swap the start and end
-        start = to;
-        stop = from;
+        //move is false.
+        check = false;
     }
-    if (start.getX() > stop.getX())
-    {
-        //Iterate from bottom left to top right.
-        for (int i = start.getY() - stop.getY() + 1; i > 0; i++)
-        {
-            //If a square is occupied
-            if (squareAt(start.getX() - i, start.getY() - i)->occupied())
-            {
-                //The check is false
-                check = false;
-            }
-        }
-    }
+    //Otherwise
     else
     {
-        //Iterate from bottom right to top left.
-        for (int i = start.getY() - stop.getY() + 1; i > 0; i--)
+        //If going from a large Y value to a smaller one
+        if (from.getY() > to.getY())
         {
-            //If a square is occupied
-            if (squareAt(start.getX() + i, start.getY() - i)->occupied())
+            //swap the start and end
+            start = to;
+            stop = from;
+        }
+        if (start.getX() > stop.getX())
+        {
+            //Iterate from bottom left to top right.
+            for (int i = start.getY() - stop.getY() + 1; i > 0; i++)
             {
-                //The check is false
-                check = false;
+                //If a square is occupied
+                if (squareAt(start.getX() - i, start.getY() - i)->occupied())
+                {
+                    //The check is false
+                    check = false;
+                }
+            }
+        }
+        else
+        {
+            //Iterate from bottom right to top left.
+            for (int i = start.getY() - stop.getY() + 1; i > 0; i--)
+            {
+                //If a square is occupied
+                if (squareAt(start.getX() + i, start.getY() - i)->occupied())
+                {
+                    //The check is false
+                    check = false;
+                }
             }
         }
     }

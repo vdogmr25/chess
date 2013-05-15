@@ -15,18 +15,14 @@ Bishop::Bishop(std::string color, bool white) : Piece(color, white){}
 bool Bishop::canMoveTo(Square& location) const
 {
     //start with false
-    bool check = false;
-    //If the piece is moving the same distance vertically as horizontally
-    if (abs(this->location()->getX() - location.getX()) == abs(this->location()->getY() - location.getY())
-        //and the square to move to is empty or occupied by an opponent
-        && (!location.occupied() || location.occupiedBy()->isWhite() != isWhite())
-        //and the path there is clear
-        && Board::isClearDiagonal(*(this->location()), location))
+    bool canMove = false;
+    //If the move is a legal diagonal move.
+    if (Board::isClearDiagonal(*(this->location()), location))
     {
         //set to true.
-        check = true;
+        canMove = true;
     }
-    return check;
+    return canMove;
 }
 
 int Bishop::value() const

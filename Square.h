@@ -32,21 +32,29 @@ public:
     
     /**
      * Gets the x coordinate for the square
+     *
+     * @return the int value of the x location
      */
     int getX ();
     
     /**
      * Gets the y coordinate for the square
+     *
+     * @return the int value of the y location
      */
     int getY ();
     
     /**
-     * Returns if the square is occupied.
+     * Returns true if the square is occupied.
+     *
+     * @return Bool true it the square is occupied.
      */
     bool occupied ();
     
     /**
      * Returns the piece the square is occupied by.
+     *
+     * @return a pointer the the piece that occupies the square
      */
     Piece* occupiedBy ();
 private:

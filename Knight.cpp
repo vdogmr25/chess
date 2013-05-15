@@ -15,16 +15,14 @@ Knight::Knight(std::string color, bool white) : Piece(color, white) {}
 bool Knight::canMoveTo(Square& location) const
 {
     //start with false
-    bool check = false;
-    //If the end location is empty or occupied by an opponent
-    if ((!location.occupied() || location.occupiedBy()->isWhite() != isWhite())
-        //And the knight is only moving in an "L" shape
-        && ((abs(this->location()->getX() - location.getX()) == 1 && abs(this->location()->getY() - location.getY()) == 2) || (abs(this->location()->getX() - location.getX()) == 2 && abs(this->location()->getY() - location.getY()) == 1)))
+    bool canMove = false;
+    //If the knight is only moving in an "L" shape
+    if ((abs(this->location()->getX() - location.getX()) == 1 && abs(this->location()->getY() - location.getY()) == 2) || (abs(this->location()->getX() - location.getX()) == 2 && abs(this->location()->getY() - location.getY()) == 1))
     {
         //set to true
-        check = true;
+        canMove = true;
     }
-    return check;
+    return canMove;
 }
 
 int Knight::value() const

@@ -23,11 +23,14 @@ public:
      * Checks if the piece can move to a given square
      *
      * @param location The square to test movement to.
+     * @return Bool result of the check (true for legal move)
      */
     bool canMoveTo (Square& location) const;
     
     /**
      * Returns the score value of a Rook;
+     *
+     * @return the score value of a Rook as an int.
      */
     int value () const;
     

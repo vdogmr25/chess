@@ -28,6 +28,7 @@ public:
      *
      * @param x The x coordinate.
      * @param y The y coordinate.
+     * @return A pointer to the square object at the given coordinate.
      */
     static Square* squareAt (int x, int y);
     
@@ -36,6 +37,7 @@ public:
      *
      * @param from The start location.
      * @param to The end location.
+     * @return Bool result of the check (true for clear path)
      */
     static bool isClearVertical (Square& from, Square& to);
     
@@ -44,6 +46,7 @@ public:
      *
      * @param from The start location.
      * @param to The end location.
+     * @return Bool result of the check (true for clear path)
      */
     static bool isClearHorizontal (Square& from, Square& to);
     
@@ -52,6 +55,7 @@ public:
      *
      * @param from The start location.
      * @param to The end location.
+     * @return Bool result of the check (true for clear path)
      */
     static bool isClearDiagonal (Square& from, Square& to);
     
@@ -67,6 +71,7 @@ public:
      * Prints the board.
      *
      * @param outStream The stream to send display values to.
+     * @return Bool result of the check (true for an end of the board)
      */
     void display (std::ostream& outStream);
 private:

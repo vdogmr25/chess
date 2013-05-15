@@ -26,6 +26,8 @@ public:
     
     /**
      * Returns a pointer to the next player.
+     *
+     * @return a Player pointer to the next player.
      */
     static Player* getNextPlayer ();
     
@@ -33,6 +35,7 @@ public:
      * Returns the opponent of a given player.
      *
      * @param player Player to pull opponent for.
+     * @return a Player pointer to the oppenent of the given player.
      */
     static Player* opponentOf (Player& player);
     

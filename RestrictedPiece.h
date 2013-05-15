@@ -26,6 +26,7 @@ public:
      *
      * @param byPlayer The player moving the piece.
      * @param to The square to move to.
+     * @return Bool result of the check (true for legal move)
      */
     virtual bool moveTo (Player& byPlayer, Square& to);
 protected:

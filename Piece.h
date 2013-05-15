@@ -29,6 +29,7 @@ public:
      *
      * @param byPlayer The player moving the piece.
      * @param to The square to move to.
+     * @return Bool result of the move (true for legal move)
      */
     virtual bool moveTo (Player& byPlayer, Square& to);
     
@@ -42,12 +43,16 @@ public:
     // Accessors
     
     /**
-     * Returns the score value of a Piece;
+     * Returns the score value of a Piece
+     *
+     * @return the score value of a Piece as an int.
      */
     virtual int value () const = 0;
     
     /**
      * Returns the color of a piece.
+     *
+     * @return String color value of the piece.
      */
     std::string color () const;
     
@@ -62,21 +67,28 @@ public:
      * Checks if the piece can move to a given square
      *
      * @param location The square to test movement to.
+     * @return Bool result of the check (true for legal move)
      */
     virtual bool canMoveTo (Square& location) const = 0;
     
     /**
      * Returns if a piece is on a square.
+     *
+     * @return Bool true if on a square
      */
     bool isOnSquare () const;
     
     /**
      * Returns if a piece is white.
+     *
+     * @return Bool true for white
      */
     bool isWhite () const;
     
     /**
      * Returns a pointer to the square the piece is on.
+     *
+     * @return a pointer to the square the piece is on
      */
     Square* location () const;
 private:

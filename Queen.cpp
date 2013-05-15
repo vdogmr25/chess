@@ -15,20 +15,18 @@ Queen::Queen(std::string color, bool white) : Piece(color, white) {}
 bool Queen::canMoveTo(Square& location) const
 {
     //start with false
-    bool check = false;
-    //If the end location is empty or controlled by an opponent
-    if ((!location.occupied() || location.occupiedBy()->isWhite() != isWhite())
-        //And is either a legal horizontal move
-        && (((this->location()->getY() == location.getY() && Board::isClearHorizontal(*(this->location()), location))
+    bool canMove = false;
+    //If the move is a legal horizontal move
+    if (((Board::isClearHorizontal(*(this->location()), location)
         //a legal verical move
-        || (this->location()->getX() == location.getX()&& Board::isClearVertical(*(this->location()), location)))
+        || (Board::isClearVertical(*(this->location()), location)))
         //or a legal diagonal move
-        || (abs(this->location()->getX() - location.getX()) == abs(this->location()->getY() - location.getY()) && Board::isClearDiagonal(*(this->location()), location))))
+        || (Board::isClearDiagonal(*(this->location()), location))))
     {
         //return true
-        check= true;
+        canMove = true;
     }
-    return check;
+    return canMove;
 }
 
 int Queen::value() const

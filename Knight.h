@@ -9,7 +9,7 @@ public:
     // Constructors
     
     /**
-     * Create a Knight with the designated color/
+     * Create a Knight with the designated color.
      *
      * @param color Color of the piece.
      */
@@ -23,11 +23,14 @@ public:
      * Checks if the piece can move to a given square
      *
      * @param location The square to test movement to.
+     * @return Bool result of the check (true for legal move)
      */
     bool canMoveTo (Square& location) const;
     
     /**
-     * Returns the score value of a Knight;
+     * Returns the score value of a Knight.
+     *
+     * @return the score value of a Knight as an int
      */
     int value () const;
     

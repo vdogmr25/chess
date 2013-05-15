@@ -46,16 +46,18 @@ bool Piece::moveTo (Player& byPlayer, Square& to)
         attempt = false;
         
         //Revert pieces to old locations
+        setLocation(current);
+        current->setOccupier(this);
+        
+        //revert capture.
         if (capture)
         {
-            setLocation(current);
             to.setOccupier(capture);
-            current->setOccupier(this);
             capture->setLocation(&to);
         }
     }
     //If the player isn't in check and there's a piece to capture
-    else if(capture != NULL)
+    else if(capture)
     {
         //capture
         byPlayer.capture(*capture);
@@ -78,8 +80,12 @@ void Piece::setLocation (Square* square)
 
 bool Piece::isOnSquare () const
 {
-    // Not developed yet.
-    return true;
+    bool onSquare = false;
+    if (location())
+    {
+        onSquare = true;
+    }
+    return onSquare;
 }
 
 bool Piece::isWhite() const

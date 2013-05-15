@@ -16,12 +16,10 @@ bool Rook::canMoveTo(Square& location) const
 {
     //start with false
     bool check = false;
-    //If the end location is empty or occupied by an opponent
-    if ((!location.occupied() || location.occupiedBy()->isWhite() != isWhite())
-        //and either a legal horizontal move
-        && ((this->location()->getY() == location.getY() && Board::isClearHorizontal(*(this->location()), location))
-            //or vertical move
-            || (this->location()->getX() == location.getX() && Board::isClearVertical(*(this->location()), location))))
+    //If the move is a legal horizontal move
+    if (Board::isClearHorizontal(*(this->location()), location)
+        //or vertical move
+        || Board::isClearVertical(*(this->location()), location))
     {
         //set to true
         check = true;

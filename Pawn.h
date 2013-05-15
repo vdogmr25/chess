@@ -24,7 +24,9 @@ public:
     //Accessors
     
     /**
-     * Returns the score value of a Pawn;
+     * Returns the score value of a Pawn
+     *
+     * @return the score value of a Pawn as an int.
      */
     int value () const;
     
@@ -32,6 +34,7 @@ public:
      * Checks if the piece can move to a given square
      *
      * @param location The square to test movement to.
+     * @return Bool result of the check (true for legal move)
      */
     bool canMoveTo (Square& location) const;
     

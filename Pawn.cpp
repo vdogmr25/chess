@@ -32,39 +32,37 @@ int Pawn::value() const
 bool Pawn::canMoveTo(Square& location) const
 {
     //Start with false
-    bool check = false;
+    bool canMove = false;
     
     //If there's a delegate
     if (_delegate)
     {
-        check = _delegate->canMoveTo(location);
+        canMove = _delegate->canMoveTo(location);
     }
     //Otherwise, if the white player is trying to move up the board
     else if ((isWhite() && location.getY() > this->location()->getY()) || 
         //or the black player is moving down the board
         ((!isWhite() && location.getY() < this->location()->getY())))
     {
-        //If the player has moved and the x locations are the same for both squares
-        if (hasMoved() && this->location()->getX() == location.getX()
+        //If the player has moved and the move is a legal vertical move
+        if (hasMoved() && Board::isClearVertical(*(this->location()), location)
             //and the piece is only moving one space
             && abs(this->location()->getY() - location.getY()) == 1
             //and the stop location is unoccupied.
             && !location.occupied())
         {
             //check is true
-            check = true;
+            canMove = true;
         }
-        //If the player hasn't moved and the x loactions are the same for both squares
-        else if (!hasMoved() && this->location()->getX() == location.getX()
-                 //and the piece is moving 2 squares at most
-                 && abs(this->location()->getY() - location.getY()) <= 2
+        //If the player hasn't moved and the piece is moving 2 squares at most
+        else if (!hasMoved() && abs(this->location()->getY() - location.getY()) <= 2
                  // and the board is clear for a vertical move
                  && Board::isClearVertical(*(this->location()), location)
                  //and the stop location is unoccupied.
                  && !location.occupied())
         {
             //check is true
-            check = true;
+            canMove = true;
         }
         //If the piece is moving the same number of spaces along the x and y axes
         else if (abs(this->location()->getY() - location.getY())
@@ -77,11 +75,11 @@ bool Pawn::canMoveTo(Square& location) const
                  && location.occupiedBy()->isWhite() != isWhite())
         {
             //check is true
-            check = true;
+            canMove = true;
         }
     }
     //return check.
-    return check;
+    return canMove;
 }
 
 bool Pawn::moveTo(Player& byPlayer, Square& to)

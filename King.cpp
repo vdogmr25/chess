@@ -15,16 +15,14 @@ King::King(std::string color, bool white) : RestrictedPiece(color, white) {}
 bool King::canMoveTo(Square& location) const
 {
     //start with false
-    bool check = false;
-    //If the square to move to is empty or occupied by an opponent
-    if ((!location.occupied() || location.occupiedBy()->isWhite() != isWhite())
-        //and the piece is only moving one square.
-        && (abs(this->location()->getX() - location.getX()) <= 1 && abs(this->location()->getY() - location.getY()) <= 1))
+    bool canMove = false;
+    //If the piece is only moving one square.
+    if (abs(this->location()->getX() - location.getX()) <= 1 && abs(this->location()->getY() - location.getY()) <= 1)
     {
         //set to true
-        check= true;
+        canMove = true;
     }
-    return check;
+    return canMove;
 }
 
 int King::value() const

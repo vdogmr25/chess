@@ -8,6 +8,7 @@
 
 #include "Pawn.h"
 #include "Queen.h"
+#include "Board.h"
 
 //Constructs a pawn by passing the color string and the white bool to parent
 Pawn::Pawn(std::string color, bool white) : RestrictedPiece(color, white) {}
@@ -25,8 +26,13 @@ Pawn::~Pawn()
 
 int Pawn::value() const
 {
+    int value = 1;
+    if (_delegate)
+    {
+        value = _delegate->value();
+    }
     // return Pawn's value
-    return 1;
+    return value;
 }
 
 bool Pawn::canMoveTo(Square& location) const
@@ -70,9 +76,15 @@ bool Pawn::canMoveTo(Square& location) const
                  //and the piece is only moving one square in a direction.
                  && abs(this->location()->getY() - location.getY()) == 1
                  //and the end location is occupied..
-                 && location.occupied()
+                 && ((location.occupied()
                  //..by an opponent's piece
                  && location.occupiedBy()->isWhite() != isWhite())
+                 // or the location is not occupied
+                 || (!location.occupied()
+                 // move encloses opposing pawn
+                 && Board::squareAt(location.getX(), this->location()->getY())->occupied()
+                 && Board::squareAt(location.getX(), this->location()->getY())->occupiedBy()->isWhite() != isWhite()
+                 && Board::squareAt(location.getX(), this->location()->getY())->occupiedBy()->value() == 1)))
         {
             //check is true
             canMove = true;

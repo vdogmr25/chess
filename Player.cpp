@@ -71,6 +71,9 @@ bool Player::makeMove()
                 std::cout << "You are in check." << std::endl;
             }
             
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            
             //inform user of bad input and prompt again.
             std::cout << "Invalid move." << std::endl << _name << ", make your move: ";
             

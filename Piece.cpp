@@ -30,6 +30,13 @@ bool Piece::moveTo (Player& byPlayer, Square& to)
             capture = to.occupiedBy();
             capture->setLocation(NULL);
         }
+        else if (Board::squareAt(to.getX(), this->location()->getY())->occupied()
+                 && Board::squareAt(to.getX(), this->location()->getY())->occupiedBy()->isWhite() != isWhite()
+                 && Board::squareAt(to.getX(), this->location()->getY())->occupiedBy()->value() == 1)
+        {
+            capture = Board::squareAt(to.getX(), this->location()->getY())->occupiedBy();
+            capture->setLocation(NULL);
+        }
         //Set the old location's occupant to NULL
         location()->setOccupier(NULL);
         //Set the new square's occupant to this piece
